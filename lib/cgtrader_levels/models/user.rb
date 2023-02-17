@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CgtraderLevels::User < ActiveRecord::Base
   attr_reader :level
 

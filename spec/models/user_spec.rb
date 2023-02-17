@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe CgtraderLevels::User do
   describe 'new user' do
     it 'has 0 reputation points' do
