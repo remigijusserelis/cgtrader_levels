@@ -17,8 +17,6 @@ module CgtraderLevels
       return unless new_level
       return if user.level == new_level
 
-      byebug
-
       user.transaction do
         user.coins += total_bonus_coins
         user.tax -= total_tax_reduction
@@ -38,7 +36,11 @@ module CgtraderLevels
     end
 
     def rewards
-      @rewards ||= Reward.includes(:levels).where(levels: { experience: user.level.experience..reputation })
+      @rewards ||= Reward.includes(:levels).where(levels: { experience: current_expierence..reputation })
+    end
+
+    def current_expierence
+      user.level&.experience || 0
     end
 
     attr_reader :user, :reputation

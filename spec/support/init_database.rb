@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'active_record'
-require 'byebug'
 
 ActiveRecord::Base.establish_connection(
   adapter: 'sqlite3',
