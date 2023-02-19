@@ -9,12 +9,7 @@ module CgtraderLevels
     private
 
     def set_new_level
-      matching_level = Level.where(experience: ..reputation).order(experience: :desc).first
-
-      return unless matching_level
-      return if level == matching_level
-
-      update(level: matching_level)
+      ApplyLevels.call(self, reputation)
     end
 
     def should_set_new_level?
