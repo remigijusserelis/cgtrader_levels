@@ -16,9 +16,9 @@ module CgtraderLevels
       return unless new_level
       return if user.level == new_level
 
-      user.transaction do
+      user.with_lock do
         user.coins += total_bonus_coins
-        user.tax -= total_tax_reduction
+        user.tax = new_tax
         user.level = new_level
         user.save!
       end
@@ -32,6 +32,10 @@ module CgtraderLevels
 
     def total_tax_reduction
       rewards.tax_reduction.sum(:amount).presence || 0
+    end
+
+    def new_tax
+      [user.tax - total_tax_reduction, 0].max
     end
 
     def rewards
