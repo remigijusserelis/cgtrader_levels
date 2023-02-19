@@ -66,6 +66,28 @@ describe CgtraderLevels::ApplyLevels do
         subject
       }.to change { user.reload.tax }.from(30).to(15)
     end
+
+    context 'from level 2' do
+      let(:user) { CgtraderLevels::User.create!(coins: 10, tax: 25, level: level2) }
+
+      it 'changes level to level3' do
+        expect {
+          subject
+        }.to change { user.reload.level }.from(level2).to(level3)
+      end
+
+      it 'gives 25 coins total' do
+        expect {
+          subject
+        }.to change { user.reload.coins }.from(10).to(25)
+      end
+
+      it 'reducs tax by 15 total' do
+        expect {
+          subject
+        }.to change { user.reload.tax }.from(25).to(15)
+      end
+    end
   end
 
   context 'with not enough reputation to level 2' do
