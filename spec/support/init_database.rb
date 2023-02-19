@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'active_record'
+require 'byebug'
 
 ActiveRecord::Base.establish_connection(
   adapter: 'sqlite3',
@@ -10,7 +11,7 @@ ActiveRecord::Base.establish_connection(
 
 ActiveRecord::Base.connection.create_table :users do |table|
   table.string :username
-  table.integer :reputation
+  table.integer :reputation, default: 0
   table.decimal :coins, default: 0
   table.decimal :tax, default: 30
   table.references :level
