@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 module CgtraderLevels
   class ApplyLevels
     def self.call(user, reputation)
@@ -37,6 +36,7 @@ module CgtraderLevels
 
     def rewards
       @rewards ||= Reward.includes(:levels).where(levels: { experience: current_expierence..reputation })
+                                           .without(user.level&.rewards)
     end
 
     def current_expierence
