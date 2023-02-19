@@ -39,10 +39,27 @@ describe CgtraderLevels::ApplyLevels do
       }.to change { user.reload.coins }.from(0).to(10)
     end
 
-    it 'reducs tax by 5' do
+    it 'reduces tax by 5' do
       expect {
         subject
       }.to change { user.reload.tax }.from(30).to(25)
+    end
+
+    context 'when tax reduction is higher than current tax' do
+      let!(:level2) do
+        CgtraderLevels::Level.create!(
+          experience: 10,
+          title: 'Second level',
+          rewards: [reward_reduce_50_tax]
+        )
+      end
+      let(:reward_reduce_50_tax) { CgtraderLevels::Reward.create( reward_type: :tax_reduction, amount: 50) }
+
+      it 'reduces tax to' do
+        expect {
+          subject
+        }.to change { user.reload.tax }.from(30).to(0)
+      end
     end
   end
 
