@@ -12,18 +12,33 @@ module CgtraderLevels
     end
 
     def call
-      matching_level = Level.where(experience: ..reputation).order(experience: :desc).first
+      new_level = Level.where(experience: ..reputation).order(experience: :desc).first
 
-      return unless matching_level
-      return if user.level == matching_level
+      return unless new_level
+      return if user.level == new_level
 
-      user.update(level: matching_level)
+      byebug
+
+      user.transaction do
+        user.coins += total_bonus_coins
+        user.tax -= total_tax_reduction
+        user.level = new_level
+        user.save!
+      end
     end
 
     private
 
-    def reputation_in_cents
-      reputation * 100
+    def total_bonus_coins
+      rewards.bonus_coins.sum(:amount).presence || 0
+    end
+
+    def total_tax_reduction
+      rewards.tax_reduction.sum(:amount).presence || 0
+    end
+
+    def rewards
+      @rewards ||= Reward.includes(:levels).where(levels: { experience: user.level.experience..reputation })
     end
 
     attr_reader :user, :reputation

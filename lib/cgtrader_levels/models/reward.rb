@@ -9,7 +9,7 @@ module CgtraderLevels
 
     enum reward_type: TYPES
 
-    has_and_belongs_to_many :rewards
+    has_and_belongs_to_many :levels
 
     validates :reward_type, inclusion: { in: TYPES.values }
   end

@@ -16,11 +16,13 @@ describe CgtraderLevels::ApplyLevels do
     CgtraderLevels::Level.create!(
       experience: 25,
       title: 'Third level',
-      rewards: [reward_10_coins, reward_reduce_5_tax]
+      rewards: [reward_15_coins, reward_reduce_10_tax]
     )
   end
-  let(:reward_10_coins) { CgtraderLevels::Reward.create( reward_type: :bonus_coins, amount: 15) }
-  let(:reward_reduce_5_tax) { CgtraderLevels::Reward.create( reward_type: :tax_reduction, amount: 10) }
+  let(:reward_10_coins) { CgtraderLevels::Reward.create( reward_type: :bonus_coins, amount: 10) }
+  let(:reward_15_coins) { CgtraderLevels::Reward.create( reward_type: :bonus_coins, amount: 15) }
+  let(:reward_reduce_5_tax) { CgtraderLevels::Reward.create( reward_type: :tax_reduction, amount: 5) }
+  let(:reward_reduce_10_tax) { CgtraderLevels::Reward.create( reward_type: :tax_reduction, amount: 10) }
 
   context 'with enough reputation to level 2' do
     let(:reputation) { 15 }
