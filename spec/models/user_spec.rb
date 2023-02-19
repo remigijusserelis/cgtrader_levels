@@ -2,9 +2,11 @@
 
 describe CgtraderLevels::User do
   subject(:user) { described_class.create! }
-  let!(:level1) { CgtraderLevels::Level.create!(experience: 0, title: 'First level') }
-  let!(:level2) { CgtraderLevels::Level.create!(experience: 10, title: 'Second level') }
+  let!(:level1) { CgtraderLevels::Level.create!(experience: 0, title: 'First level', rewards: [reward_bonus_1_coin]) }
+  let!(:level2) { CgtraderLevels::Level.create!(experience: 10, title: 'Second level', rewards: [reward_bonus_7_coins]) }
   let!(:level3) { CgtraderLevels::Level.create!(experience: 13, title: 'Third level') }
+  let(:reward_bonus_1_coin) { CgtraderLevels::Reward.create( reward_type: :bonus_coins, amount: 1) }
+  let(:reward_bonus_7_coins) { CgtraderLevels::Reward.create( reward_type: :bonus_coins, amount: 7) }
 
   context 'with new user' do
     it 'has 0 reputation points' do
@@ -32,7 +34,6 @@ describe CgtraderLevels::User do
 
   describe 'level up bonuses & privileges' do
     it 'gives 7 coins to user' do
-      pending
 
       expect {
         @user.update_attribute(:reputation, 10)
