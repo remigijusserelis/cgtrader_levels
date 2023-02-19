@@ -1,4 +1,8 @@
 # frozen_string_literal: true
 
-class CgtraderLevels::Level < ActiveRecord::Base
+module CgtraderLevels
+  class Level < ActiveRecord::Base
+    has_many :users
+    has_and_belongs_to_many :rewards
+  end
 end

@@ -1,29 +1,19 @@
 # frozen_string_literal: true
 
-class CgtraderLevels::User < ActiveRecord::Base
-  attr_reader :level
+module CgtraderLevels
+  class User < ActiveRecord::Base
+    belongs_to :level
 
-  after_initialize do
-    self.reputation = 0
+    after_commit :set_new_level, if: :should_set_new_level?
 
-    matching_level = CgtraderLevels::Level.where(experience: reputation).first
+    private
 
-    if matching_level
-      self.level_id = matching_level.id
-      @level = matching_level
+    def set_new_level
+      ApplyLevels.call(self, reputation)
     end
-  end
 
-  after_update :set_new_level
-
-  private
-
-  def set_new_level
-    matching_level = CgtraderLevels::Level.where(experience: reputation).first
-
-    if matching_level
-      self.level_id = matching_level.id
-      @level = matching_level
+    def should_set_new_level?
+      level.nil? || saved_change_to_reputation?
     end
   end
 end
